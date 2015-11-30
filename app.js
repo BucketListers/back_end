@@ -26,7 +26,7 @@ app.use(session({
 	resave : false,
 	saveUninitialized : false,
 	store : new MongoStore({
-		url : "mongodb://localhost/ga-passport-sessions"
+		url : "mongodb://localhost/bucket_list"
 	}),
 	cookie : {
 		maxAge : 300000 // 5 minutes
