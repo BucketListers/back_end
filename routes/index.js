@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var authCtrl = require('../controllers/auth');
+var ctrl = require('../controllers/main');
 
 /* GET home page. */
 router.get('/', authCtrl.root.get);
@@ -25,5 +26,12 @@ router.route('/changePassword').
 router.route('/signup').
 	get(authCtrl.deny).
 	post(authCtrl.signup.post);
+
+router.route('/items').
+  get(ctrl.showList).
+  post(ctrl.createItem).
+  patch(ctrl.updateItem).
+  delete(ctrl.destroyItem);
+
 
 module.exports = router;

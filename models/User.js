@@ -13,7 +13,10 @@ var userSchema = new Schema({
 		required : true
 	},
 	passwordDigest : String,
-	list : []
+	list : {
+		type: Array,
+		default: []
+	}
 });
 
 userSchema.plugin(uniqueValidator);
