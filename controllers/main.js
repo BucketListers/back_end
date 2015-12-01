@@ -1,5 +1,8 @@
 'use strict';
 
+
+var ListItem = require('../models').model('ListItem');
+
 var ctrl = {
 
     root : {
@@ -36,6 +39,7 @@ var ctrl = {
             var err = new Error("Not Authorized!");
             return next(err);
         }
+        console.log(req.user.list);
         res.json({
             title : (req.user.list) || 'No List.'
         });
@@ -49,15 +53,16 @@ var ctrl = {
         }
 
         var pListItem = new Promise(function(resolve, reject) {
-            var item = {
+            ListItem.create({
                 name : req.body.name,
                 city : req.body.city
-            };
-            if(err) {
-                reject(err);
-                return;
-            }
-            resolve(item);
+            }, function(err, listItem) {
+                if(err) {
+                    reject(err);
+                    return;
+                }
+                resolve(listItem);
+            });
         });
 
         pListItem.then(function(listItem){
@@ -78,15 +83,20 @@ var ctrl = {
             return next(err);
         }
         var pUpdate = new Promise(function(resolve, reject) {
-            var item = {
-                name : req.body.name,
-                city : req.body.city
-            };
-            if(err) {
-                reject(err);
-                return;
-            }
-            resolve(item);
+            ListItem.findByIdAndUpdate(
+
+                //THIS IS WHAT IS USED BY FIND AND UPDATE
+                id,
+                [update],
+                [options],
+                [callback]
+            );
+                 if(err) {
+                    reject(err);
+                    return;
+                }
+                resolve(item);
+
         });
 
         pUpdate.then(function(listItem){
@@ -100,6 +110,13 @@ var ctrl = {
     },
 // *************************** BROKEN ***************************
     destroyItem : function(req, res) {
+        ListItem.findByIdAndRemove(
+            // THIS IS WHAT IS USED BY FIND AND REMOVE
+            id,
+            [options],
+            [callback]
+        )
+
         res.json({
             title : 'item deleted'
         });

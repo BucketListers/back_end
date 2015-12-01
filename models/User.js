@@ -14,10 +14,13 @@ var userSchema = new Schema({
 	},
 	passwordDigest : String,
 	list : {
-		type: Array,
-		default: []
+		type: [Schema.Types.ObjectId],
+		ref: "ListItem"
 	}
 });
+
+// type: objectId,
+// ref: "ListItem"
 
 userSchema.plugin(uniqueValidator);
 
