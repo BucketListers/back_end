@@ -1,33 +1,14 @@
 'use strict';
 
-var passport = require('passport');
-var User = require('../models').model('User');
+var ListItem = require('../models').model('ListItem');
 
 module.exports = {
     deny : function(req, res) {
             res.sendStatus(405);
     },
-    root : {
-        get : function(req, res) {
-            res.json({
-                title : (req.user && req.user.userName) || 'Nobody'
-            });
-        }
-    },
     login : {
         post : passport.authenticate('local'),
         all : function(req, res) {
-            res.sendStatus(200);
-        }
-    },
-    logout : {
-        all : function(req, res, next) {
-            if(!req.user) {
-                var err = new Error("Log in first.");
-                return next(err);
-            }
-
-            req.logout();
             res.sendStatus(200);
         }
     },

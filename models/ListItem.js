@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose');
 
+
 var listItemSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -43,12 +44,10 @@ var listItemSchema = new mongoose.Schema({
     }
   }
 }, {
-  timestamps: true,
-  toObject: { virtuals: true },
-  toJSON: { virtuals: true }
+  timestamps: true
 });
 
 //model
 var ListItem = mongoose.model('List Item', listItemSchema);
 
-module.exports = ListItem;
+module.exports = listItemSchema;

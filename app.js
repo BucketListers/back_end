@@ -13,6 +13,7 @@ var passport = require('./lib/passport');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var list_items = require('./routes/list_items');
 
 var app = express();
 
@@ -26,7 +27,7 @@ app.use(session({
 	resave : false,
 	saveUninitialized : false,
 	store : new MongoStore({
-		url : "mongodb://localhost/bucket_list"
+		url : "mongodb://localhost/session_data"
 	}),
 	cookie : {
 		maxAge : 300000 // 5 minutes
@@ -46,6 +47,7 @@ app.use(passport.session());
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/list_items', list_items);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
