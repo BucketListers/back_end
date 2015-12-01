@@ -13,35 +13,33 @@ var listItemSchema = new mongoose.Schema({
     required: true
   },
   description: {
-    type: String,
-    required: true,
+    type: String
   },
   completed: {
     type: Boolean,
-    required: true,
+    required: true
   },
   target_date: {
     type: Date,
-    required: true,
     match: /\d{4}-\d{2}-\d{2}/
   },
   location: {
     address: {
       type: String,
-      required: true,
     },
     city: {
       type: String,
-      required: true,
+      required: true
     },
     state: {
       type: String,
-      required: true,
+      required: true
     },
     country: {
       type: String,
-      required: true,
-    }
+      required: true
+    },
+    required: true
   }
 }, {
   timestamps: true

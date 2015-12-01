@@ -6,18 +6,48 @@ module.exports = {
     deny : function(req, res) {
             res.sendStatus(405);
     },
-    login : {
-        post : passport.authenticate('local'),
-        all : function(req, res) {
-            res.sendStatus(200);
+    readList : {
+        get : function(req, res) {
+            res.json({
+                title : (req.user && req.user.list) || 'Nothing here'
+            });
         }
     },
-    changePassword : {
+    create : {
+        post : function(req, res, next) {
+            if(!req.body || !req.user || !req.body.name || !req.body.category || !req.body.completed || !req.body.location) {
+                var err = new Error("No content!");
+                return next(err);
+            }
+
+            var pListItem = new Promise(function(res, rej) {
+                ListItem.create({
+                    name : req.body.name,
+                    category : req.body.category,
+                    completed : req.body.completed,
+                    location : req.body.location
+                }, function(err, listItem) {
+                    if(err) {
+                        rej(err);
+                        return;
+                    }
+
+                    res(listItem);
+                });
+            });
+            pListItem.then(function() {
+                res.sendStatus(200);
+            }).catch(function(err) {
+                next(err);
+            });
+        }
+    },
+    update : {
         patch : function(req, res, next) {
             // check that user is logged in
             // check that body contains a password value
-            if(!req.body || !req.user || !req.body.password) {
-                var err = new Error("No password supplied.");
+            if(!req.body && !req.user && !req.body.name && !req.body.category && !req.body.completed && !req.body.target_date && !req.body.description && !req.body.location) {
+                var err = new Error("No information supplied.");
                 return next(err);
             }
             // bcrypt the password
@@ -27,34 +57,6 @@ module.exports = {
                 }).catch(function(err) {
                     next(err);
                 });
-        }
-    },
-    signup : {
-        post : function(req, res, next) {
-            if(!req.body || !req.body.username || !req.body.password) {
-                var err = new Error("No credentials.");
-                return next(err);
-            }
-
-            var pUser = new Promise(function(res, rej) {
-                User.create({
-                    userName : req.body.username
-                }, function(err, user) {
-                    if(err) {
-                        rej(err);
-                        return;
-                    }
-
-                    res(user);
-                });
-            });
-            pUser.then(function(user) {
-                return user.setPassword(req.body.password);
-            }).then(function() {
-                res.sendStatus(200);
-            }).catch(function(err) {
-                next(err);
-            });
         }
     }
 };
