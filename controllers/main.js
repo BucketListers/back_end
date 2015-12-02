@@ -1,6 +1,10 @@
 'use strict';
 
+var mongoose = require('mongoose');
+mongoose.Promise = Promise;
 
+
+var User = require('../models').model('User');
 var ListItem = require('../models').model('ListItem');
 
 var ctrl = {
@@ -34,17 +38,25 @@ var ctrl = {
     },
 
 
-    showList : function(req, res) {
+
+
+    showList : function(req, res, next) {
         if(!req.user) {
             var err = new Error("Not Authorized!");
             return next(err);
         }
-        console.log(req.user.list);
-        res.json({
-            title : (req.user.list) || 'No List.'
+
+        User.findById(req.user._id).populate('list').exec().then(function(user){
+            res.json(user.list);
+        }).catch(function(err){
+            next(err);
         });
 
+
+
     },
+
+
 
     createItem : function(req, res, next) {
         if(!req.body || !req.user || !req.body.name || !req.body.city) {
@@ -56,13 +68,14 @@ var ctrl = {
             ListItem.create({
                 name : req.body.name,
                 city : req.body.city
-            }, function(err, listItem) {
-                if(err) {
-                    reject(err);
-                    return;
+                }, function(err, listItem) {
+                    if(err) {
+                        reject(err);
+                        return;
+                    }
+                    resolve(listItem);
                 }
-                resolve(listItem);
-            });
+            );
         });
 
         pListItem.then(function(listItem){
@@ -84,24 +97,22 @@ var ctrl = {
         }
         var pUpdate = new Promise(function(resolve, reject) {
             ListItem.findByIdAndUpdate(
-
                 //THIS IS WHAT IS USED BY FIND AND UPDATE
                 id,
-                [update],
-                [options],
-                [callback]
-            );
-                 if(err) {
-                    reject(err);
-                    return;
+                object, function(err, listItem){
+                    if(err) {
+                        reject(err);
+                        return;
+                    }
+                    resolve(listItem);
                 }
-                resolve(item);
-
+            );
         });
 
         pUpdate.then(function(listItem){
-          req.user.list.push(listItem);
-          req.user.save();
+          //NEEDS FUNCTIONS TO RUN ON UPDATED listItem
+          //req.user.list.push(listItem);
+          //req.user.save();
         }).then(function() {
             res.sendStatus(200);
         }).catch(function(err) {
@@ -113,8 +124,9 @@ var ctrl = {
         ListItem.findByIdAndRemove(
             // THIS IS WHAT IS USED BY FIND AND REMOVE
             id,
-            [options],
-            [callback]
+            function(){
+                console.log("Deleted item id: " + id)
+            }
         )
 
         res.json({

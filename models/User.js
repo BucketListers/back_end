@@ -13,10 +13,10 @@ var userSchema = new Schema({
 		required : true
 	},
 	passwordDigest : String,
-	list : {
-		type: [Schema.Types.ObjectId],
+	list : [{
+		type: Schema.Types.ObjectId,
 		ref: "ListItem"
-	}
+	}]
 });
 
 // type: objectId,
