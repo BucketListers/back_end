@@ -81,8 +81,9 @@ var ctrl = {
         pListItem.then(function(listItem){
           req.user.list.push(listItem);
           req.user.save();
-        }).then(function() {
-            res.sendStatus(200);
+          return listItem;
+        }).then(function(listItem) {
+            res.json(listItem);
         }).catch(function(err) {
             next(err);
         });
