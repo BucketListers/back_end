@@ -98,9 +98,9 @@ var ctrl = {
         }
         var pUpdate = new Promise(function(resolve, reject) {
             ListItem.findByIdAndUpdate(
-                //THIS IS WHAT IS USED BY FIND AND UPDATE
-                id,
-                object, function(err, listItem){
+                req.params.id,
+                object, //FIGURE OUT WHAT OBJECT ISSSSSSWS
+                function(err, listItem){
                     if(err) {
                         reject(err);
                         return;
@@ -120,18 +120,17 @@ var ctrl = {
             next(err);
         });
     },
-// *************************** BROKEN ***************************
-    destroyItem : function(req, res) {
-        ListItem.findByIdAndRemove(
-            // THIS IS WHAT IS USED BY FIND AND REMOVE
-            id,
-            function(){
-                console.log("Deleted item id: " + id)
-            }
-        )
+    destroyReference : function(req, res) {
+        ListItem.findByIdAndUpdate( req.params.id, function(err, item){
+            console.log("Deleted reference in userID: " + req.params.id);
+            res.sendStatus(200);
+        });
+    },
 
-        res.json({
-            title : 'item deleted'
+    destroyItem : function(req, res) {
+        ListItem.findByIdAndRemove( req.params.id, function(err, item){
+            console.log("Deleted item id: " + req.params.id);
+            res.sendStatus(200);
         });
     }
 };

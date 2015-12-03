@@ -30,8 +30,12 @@ router.route('/signup').
 router.route('/items').
   get(ctrl.showList).
   post(ctrl.createItem).
-  patch(ctrl.updateItem).
+  patch(ctrl.updateItem);
+
+router.route('/items/:id').
   delete(ctrl.destroyItem);
 
+router.route('/users/:id').
+  delete(ctrl.destroyItem);
 
 module.exports = router;
