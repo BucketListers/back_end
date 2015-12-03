@@ -22,7 +22,7 @@ var app = express();
 app.use(logger('dev'));
 
 app.use(cors({
-  origin: 'http://localhost:5000',
+  origin: ['http://localhost:5000', 'http://BucketListers.github.io'],
   credentials: true
 }));
 
@@ -33,7 +33,7 @@ app.use(session({
 	resave : false,
 	saveUninitialized : false,
 	store : new MongoStore({
-		url : "mongodb://localhost/session_data"
+		url : process.env.MONGOLAB_URI
 	}),
 	cookie : {
 		maxAge : 300000 // 5 minutes

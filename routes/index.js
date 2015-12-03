@@ -35,8 +35,4 @@ router.route('/items/:id').
   delete(ctrl.destroyItem).
   patch(ctrl.updateItem);
 
-
-// router.route('/users/:id').
-//   patch(ctrl.destroyReference);
-
 module.exports = router;
