@@ -22,7 +22,7 @@ var app = express();
 app.use(logger('dev'));
 
 app.use(cors({
-  origin: 'http://localhost:5000',
+  origin: 'BucketListers.github.io/bucketlisters_front_end',
   credentials: true
 }));
 
