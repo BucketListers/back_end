@@ -10,15 +10,15 @@ module.exports = {
     root : {
         get : function(req, res) {
             res.json({
-                title : (req.user && req.user.userName) || 'Nobody'
+                title : (req.user) || 'Nobody'
             });
         }
     },
     login : {
-        post : passport.authenticate('local', {
-            successRedirect : '/',
-            failureRedirect : '/'
-        })
+        post : passport.authenticate('local'),
+        all : function(req, res) {
+            res.sendStatus(200);
+        }
     },
     logout : {
         all : function(req, res, next) {
@@ -45,7 +45,7 @@ module.exports = {
                     res.sendStatus(200);
                 }).catch(function(err) {
                     next(err);
-                });            
+                });
         }
     },
     signup : {

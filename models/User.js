@@ -12,8 +12,15 @@ var userSchema = new Schema({
 		unique : true,
 		required : true
 	},
-	passwordDigest : String
+	passwordDigest : String,
+	list : [{
+		type: Schema.Types.ObjectId,
+		ref: "ListItem"
+	}]
 });
+
+// type: objectId,
+// ref: "ListItem"
 
 userSchema.plugin(uniqueValidator);
 

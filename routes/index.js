@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var authCtrl = require('../controllers/auth');
+var ctrl = require('../controllers/main');
 
 /* GET home page. */
 router.get('/', authCtrl.root.get);
@@ -11,8 +12,9 @@ router.get('/', authCtrl.root.get);
  *
  */
 router.route('/login').
-	get(authCtrl.deny).
-	post(authCtrl.login.post);
+  get(authCtrl.deny).
+  post(authCtrl.login.post).
+  all(authCtrl.login.all);
 
 router.route('/logout').
 	all(authCtrl.logout.all);
@@ -24,5 +26,17 @@ router.route('/changePassword').
 router.route('/signup').
 	get(authCtrl.deny).
 	post(authCtrl.signup.post);
+
+router.route('/items').
+  get(ctrl.showList).
+  post(ctrl.createItem);
+
+router.route('/items/:id').
+  delete(ctrl.destroyItem).
+  patch(ctrl.updateItem);
+
+
+// router.route('/users/:id').
+//   patch(ctrl.destroyReference);
 
 module.exports = router;

@@ -10,6 +10,7 @@ process.env.SESSION_SECRET || require('dotenv').load();
 // require passport
 // require passport config file
 var passport = require('./lib/passport');
+var cors = require('cors');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -19,6 +20,12 @@ var app = express();
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+
+app.use(cors({
+  origin: 'http://localhost:5000',
+  credentials: true
+}));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
@@ -26,7 +33,7 @@ app.use(session({
 	resave : false,
 	saveUninitialized : false,
 	store : new MongoStore({
-		url : "mongodb://localhost/bucket_list"
+		url : "mongodb://localhost/session_data"
 	}),
 	cookie : {
 		maxAge : 300000 // 5 minutes
@@ -37,6 +44,7 @@ app.use(session({
 		});
 	}
 }));
+
 
 // mount return value of `passport.initialize` invocation on `app`
 app.use(passport.initialize());
