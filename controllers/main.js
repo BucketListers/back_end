@@ -99,7 +99,10 @@ var ctrl = {
         var pUpdate = new Promise(function(resolve, reject) {
             ListItem.findByIdAndUpdate(
                 req.params.id,
-                object, //FIGURE OUT WHAT OBJECT ISSSSSSWS
+                {
+                name : req.body.name,
+                city : req.body.city
+                },
                 function(err, listItem){
                     if(err) {
                         reject(err);
@@ -110,29 +113,31 @@ var ctrl = {
             );
         });
 
-        pUpdate.then(function(listItem){
-          //NEEDS FUNCTIONS TO RUN ON UPDATED listItem
-          //req.user.list.push(listItem);
-          //req.user.save();
-        }).then(function() {
+        pUpdate.then(function() {
             res.sendStatus(200);
         }).catch(function(err) {
             next(err);
         });
     },
-    destroyReference : function(req, res) {
-        ListItem.findByIdAndUpdate( req.params.id, function(err, item){
-            console.log("Deleted reference in userID: " + req.params.id);
-            res.sendStatus(200);
-        });
-    },
-
     destroyItem : function(req, res) {
         ListItem.findByIdAndRemove( req.params.id, function(err, item){
             console.log("Deleted item id: " + req.params.id);
             res.sendStatus(200);
         });
     }
+
+    // destroyReference : function(req, res) {
+    //     ListItem.findByIdAndUpdate( req.user._id,{
+    //     $pull: {List: [{req.params.id}]}
+    // }, function(err, item){
+    //         console.log("Deleted reference in userID: " + req.params.id);
+    //         res.sendStatus(200);
+    //     });
+    // }
+
 };
 
 module.exports = ctrl;
+
+
+// db.users.update( { _id: ObjectId('565e0904eb8f76255c362e68') }, { $pull: { list: [] } } );

@@ -29,13 +29,14 @@ router.route('/signup').
 
 router.route('/items').
   get(ctrl.showList).
-  post(ctrl.createItem).
-  patch(ctrl.updateItem);
+  post(ctrl.createItem);
 
 router.route('/items/:id').
-  delete(ctrl.destroyItem);
+  delete(ctrl.destroyItem).
+  patch(ctrl.updateItem);
 
-router.route('/users/:id').
-  delete(ctrl.destroyItem);
+
+// router.route('/users/:id').
+//   patch(ctrl.destroyReference);
 
 module.exports = router;
