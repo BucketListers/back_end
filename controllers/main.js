@@ -102,7 +102,7 @@ var ctrl = {
                 {
                 name : req.body.name,
                 city : req.body.city
-                },
+                }, {new: true},
                 function(err, listItem){
                     if(err) {
                         reject(err);
@@ -113,8 +113,11 @@ var ctrl = {
             );
         });
 
-        pUpdate.then(function() {
-            res.sendStatus(200);
+        pUpdate.then(function(listItem){
+          req.user.save();
+          return listItem;
+        }).then(function(listItem) {
+            res.json(listItem);
         }).catch(function(err) {
             next(err);
         });
