@@ -122,21 +122,21 @@ var ctrl = {
             next(err);
         });
     },
-    destroyItem : function(req, res) {
-        ListItem.findByIdAndRemove( req.params.id, function(err, item){
-            console.log("Deleted item id: " + req.params.id);
-            res.sendStatus(200);
-        });
-    }
 
-    // destroyReference : function(req, res) {
-    //     ListItem.findByIdAndUpdate( req.user._id,{
-    //     $pull: {List: [{req.params.id}]}
-    // }, function(err, item){
-    //         console.log("Deleted reference in userID: " + req.params.id);
-    //         res.sendStatus(200);
-    //     });
-    // }
+    destroyItem : function(req, res, next) {
+        User.findByIdAndUpdate( req.user._id,{
+            $pullAll : { list: [ new mongoose.Types.ObjectId(req.params.id) ] }
+        },
+        {new: true}).exec().then(function(){
+            console.log('item id is ', req.params.id);
+            return ListItem.findByIdAndRemove(req.params.id).exec();
+        }).then(function(){
+            res.sendStatus(200);
+        }).catch(function(err){
+            console.log(err);
+            next(err);
+        }) ;
+    }
 
 };
 

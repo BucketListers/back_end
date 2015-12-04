@@ -6,6 +6,6 @@ mongoose.Promise = Promise;
 mongoose.model('User', require('./User'));
 mongoose.model('ListItem', require('./ListItem'));
 
-mongoose.connect("mongodb://localhost/bucket_list");
+mongoose.connect(process.env.MONGOLAB_URI);
 
 module.exports = mongoose;
